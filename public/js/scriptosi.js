@@ -21,6 +21,7 @@ $(document).ready(function () {
                         let input = document.createElement('input');
                         input.style.width = '100%';
                         input.placeholder = title;
+                        input.classList.add('form-control');
                         footer.replaceChildren(input);
 
                         input.addEventListener('keyup', () => {

@@ -1,7 +1,7 @@
 $(document).ready(function () {
     'use strict';
 
-    new DataTable('#table-incidencias', {
+    $('#table-incidencias').DataTable({
         autoWidth: true,
         columnDefs: [
             { targets: '_all', width: 'auto' }
@@ -21,6 +21,7 @@ $(document).ready(function () {
                         let input = document.createElement('input');
                         input.style.width = '100%';
                         input.placeholder = title;
+                        input.classList.add('form-control');
                         footer.replaceChildren(input);
 
                         input.addEventListener('keyup', () => {
@@ -35,7 +36,6 @@ $(document).ready(function () {
             table.on('draw.dt', function () {
 
                 let botones = document.getElementsByClassName('btn-ver');
-
                 for (let i = 0; i < botones.length; i++) {
                     botones[i].addEventListener('click', function (e) {
                         $.ajax({
@@ -104,9 +104,7 @@ $(document).ready(function () {
         }
     });
 
-
     let form = document.getElementById('form-import');
-
     form.addEventListener('submit', function (e) {
         let button_cargar = document.getElementById('cargar');
         let button_cerrar = document.getElementById('cerrar');
@@ -116,7 +114,6 @@ $(document).ready(function () {
     })
 
     let botones = document.getElementsByClassName('btn-ver');
-
     for (let i = 0; i < botones.length; i++) {
         botones[i].addEventListener('click', function (e) {
             $.ajax({
