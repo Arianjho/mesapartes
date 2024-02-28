@@ -1,7 +1,7 @@
 $(document).ready(function () {
     'use strict';
 
-    new DataTable('#table-incidencias', {
+    $('#table-incidencias').DataTable({
         autoWidth: true,
         columnDefs: [
             { targets: '_all', width: 'auto' }
@@ -144,13 +144,12 @@ $(document).ready(function () {
     let botones_revisar = document.getElementsByClassName('btn-revisar');
     for (let i = 0; i < botones_revisar.length; i++) {
         botones_revisar[i].addEventListener('click', function (e) {
-            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             $.ajax({
                 type: "POST",
                 url: "http://127.0.0.1:8000/incidenciasosi/revisar/" + botones_revisar[i].getAttribute('data-id'),
                 dataType: "json",
                 headers: {
-                    'X-CSRF-TOKEN': csrfToken
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
                     if (response == 1) {

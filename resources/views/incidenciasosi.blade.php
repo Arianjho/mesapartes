@@ -1,56 +1,24 @@
-<!DOCTYPE html>
-<html lang="es">
+@extends('layout.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Incidencias OSI</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.bootstrap5.min.css">
-</head>
+@section('titulo', 'Incidencias OSE')
 
-<body class="bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="text-center my-5">
-                <h1>Incidencias OSI</h1>
-                <div>
-                    <a href="{{ route('incidencias') }}" class="btn btn-primary">Ir a Incidencias</a>
-                </div>
-            </div>
-            <div class="">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                    data-bs-target="#importar">Importar</button>
-
-                <div class="modal fade" id="importar" tabindex="-1" aria-labelledby="importarDoc" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="importarDoc">Importar Excel</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <form id="form-import" action="{{ route('importarosi') }}" method="post"
-                                enctype="multipart/form-data">
-                                <div class="modal-body">
-                                    @csrf
-                                    <input type="file" name="archivo" class="form-control" required>
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="cerrar" type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cerrar</button>
-                                    <button id="cargar" type="submit" class="btn btn-success">Cargar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-5">
-                <table id="table-incidencias" class="table table-bordered table-hover table-active">
+@section('template')
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">
+                INCIDENCIAS OSE
+            </h6>
+            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#importar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-file-earmark-diff-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M8 6a.5.5 0 0 1 .5.5V8H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V9H6a.5.5 0 0 1 0-1h1.5V6.5A.5.5 0 0 1 8 6m-2.5 6.5A.5.5 0 0 1 6 12h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5" />
+                </svg>
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="table-incidencias" style="width: 100%" class="table table-bordered table-hover table-active">
                     <thead>
                         <tr>
                             <th style="width: 5%">Revisado</th>
@@ -59,7 +27,7 @@
                             <th style="width: 10%">Fecha</th>
                             <th style="width: 40%">Razón Social</th>
                             <th style="width: 10%">Documento</th>
-                            <th style="width: 5%">Cod. Error</th>
+                            <th style="width: 5%">Error</th>
                             <th style="width: 10%">Ope.</th>
                         </tr>
                     </thead>
@@ -80,7 +48,7 @@
                                 <td>{{ $incidencia->coderror }}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-xs btn-ver btn-primary"
+                                        <button type="button" class="btn btn-sm btn-ver btn-primary"
                                             data-id="{{ $incidencia->id }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                 fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
@@ -90,7 +58,7 @@
                                             </svg>
                                         </button>
 
-                                        <button type="button" class="btn btn-xs btn-editar btn-warning"
+                                        <button type="button" class="btn btn-sm btn-editar btn-warning"
                                             data-id="{{ $incidencia->id }}"
                                             @if ($incidencia->revisado == 2 || $incidencia->revisado == 1) disabled @endif>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -102,12 +70,11 @@
                                             </svg>
                                         </button>
 
-                                        <button type="button" class="btn btn-xs btn-revisar btn-secondary"
+                                        <button type="button" class="btn btn-sm btn-revisar btn-success"
                                             data-id="{{ $incidencia->id }}"
                                             @if ($incidencia->revisado == 1) disabled @endif>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                fill="currentColor" class="bi bi-bookmark-check-fill"
-                                                viewBox="0 0 16 16">
+                                                fill="currentColor" class="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd"
                                                     d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5m8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z" />
                                             </svg>
@@ -125,11 +92,35 @@
                             <th style="width: 10%">Fecha</th>
                             <th style="width: 40%">Razón Social</th>
                             <th style="width: 12%">Documento</th>
-                            <th style="width: 5%">Cod. Error</th>
+                            <th style="width: 5%">Error</th>
                             <th style="width: 10%">Ope.</th>
                         </tr>
                     </tfoot>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="importar" tabindex="-1" aria-labelledby="importarDoc" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importarDoc">Importar Excel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="form-import" action="{{ route('importarosi') }}" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        @csrf
+                        <label for="">Subir Archivo</label>
+                        <input type="file" name="archivo" class="form-control-file" accept=".xls,.xlsx" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button id="cargar" type="submit" class="btn btn-danger">Cargar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -163,8 +154,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="">Razon Social</label>
-                                <input class="form-control" name="razonsocial" type="text" value=""
-                                    disabled>
+                                <input class="form-control" name="razonsocial" type="text" value="" disabled>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="">Documento</label>
@@ -172,8 +162,7 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="">Tipo</label>
-                                <input class="form-control" name="tipodocumento" type="text" value=""
-                                    disabled>
+                                <input class="form-control" name="tipodocumento" type="text" value="" disabled>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="">Serie</label>
@@ -181,8 +170,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="">Correlativo</label>
-                                <input class="form-control" name="correlativo" type="text" value=""
-                                    disabled>
+                                <input class="form-control" name="correlativo" type="text" value="" disabled>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="">Cod. Error</label>
@@ -202,14 +190,20 @@
             </div>
         </div>
     </div>
+@endsection
 
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.datatables.net/2.0.0/js/dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.0/js/dataTables.bootstrap5.min.js"></script>
+@section('js')
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+    <script src="{{ asset('js/demo/datatables-demo.js') }}"></script>
     <script src="{{ asset('js/scriptosi.js') }}"></script>
+@endsection
+
 </body>
 
 </html>

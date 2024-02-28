@@ -61,6 +61,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 table {
   font-size: .9rem !important;
+  color: #000 !important;
 }
 
 body {
@@ -69,7 +70,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #858796;
+  color: #000;
   text-align: left;
   background-color: #fff;
 }
@@ -1495,8 +1496,8 @@ pre code {
 
 .table th,
 .table td {
-  padding: 0.75rem;
-  vertical-align: top;
+  padding: 0.3rem 0.75rem;
+  vertical-align: middle;
   border-top: 1px solid #e3e6f0;
 }
 
@@ -11283,4 +11284,8 @@ footer.sticky-footer .copyright {
 
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
+}
+
+.bg-sidebar-personalized {
+  background-color: #313A46;
 }
