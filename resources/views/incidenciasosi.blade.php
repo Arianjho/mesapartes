@@ -130,7 +130,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="importarDoc">Incidencia</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="form-verincidencia" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
@@ -184,11 +184,11 @@
                     </div>
                     <div class="modal-footer">
                         <button id="cerrar" type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">Cerrar</button>
+                            data-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
-        </div>
+        </div>[]
     </div>
 @endsection
 

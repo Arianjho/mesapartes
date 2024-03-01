@@ -32,12 +32,13 @@ class IncidenciaOSIController extends Controller
         }
     }
 
-    public function pendiente($id) {
+    public function pendiente($id)
+    {
         $incidencia = IncidenciaOSI::find($id);
         $incidencia['revisado'] = 2;
         if ($incidencia->save()) {
             return 1;
-        }        
+        }
     }
 
     public function importar(Request $request)
@@ -60,10 +61,12 @@ class IncidenciaOSIController extends Controller
 
             if (isset($row[8])) {
                 $valordigerido = $row[8];
+                $coderror = $row[9] ?? null;
+                $descripcion = $row[14] ?? null;
 
-                $existeEnBD = IncidenciaOSI::where('valordigerido', $valordigerido)->exists();
+                $incidencia = IncidenciaOSI::where('valordigerido', $valordigerido)->first();
 
-                if (!$existeEnBD) {
+                if (!$incidencia) {
                     IncidenciaOSI::create([
                         'revisado'      => strlen($row[0]) > 0 ? 1 : 0,
                         'ruc'           => $row[1]  ?? null,
@@ -78,12 +81,10 @@ class IncidenciaOSIController extends Controller
                         'descripcion'   => $row[14] ?? null,
                     ]);
                 } else {
-                    $incidencia = IncidenciaOSI::where('valordigerido', $valordigerido)->first();
-
                     if ($incidencia['revisado'] != 1) {
                         $incidencia->update([
-                            'coderror'      => $row[9]  ?? null,
-                            'descripcion'   => $row[14] ?? null,
+                            'coderror'      => $coderror,
+                            'descripcion'   => $descripcion,
                         ]);
                     }
                 }

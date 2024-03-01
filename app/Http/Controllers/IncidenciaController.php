@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\IncidenciaImport;
 use App\Models\Incidencia;
+use App\Models\Usuario;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,26 +18,29 @@ class IncidenciaController extends Controller
         return view('incidencias', compact('incidencias'));
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $incidencia = Incidencia::find($id);
         return json_encode($incidencia);
     }
 
-    public function revisar($id) {
+    public function revisar($id)
+    {
         $incidencia = Incidencia::find($id);
         $incidencia['revisado'] = 1;
         $incidencia['fecharevisado'] = Carbon::now();
         if ($incidencia->save()) {
             return 1;
-        }        
+        }
     }
 
-    public function pendiente($id) {
+    public function pendiente($id)
+    {
         $incidencia = Incidencia::find($id);
         $incidencia['revisado'] = 2;
         if ($incidencia->save()) {
             return 1;
-        }        
+        }
     }
 
     public function importar(Request $request)
@@ -58,10 +62,12 @@ class IncidenciaController extends Controller
             }
 
             $valordigerido = $row[8];
+            $coderror = $row[9] ?? null;
+            $descripcion = $row[14] ?? null;
 
-            $existeEnBD = Incidencia::where('valordigerido', $valordigerido)->exists();
+            $incidencia  = Incidencia::where('valordigerido', $valordigerido)->first();
 
-            if (!$existeEnBD) {
+            if (!$incidencia) {
                 Incidencia::create([
                     'revisado'      => strlen($row[0]) > 0 ? 1 : 0,
                     'ruc'           => $row[1]  ?? null,
@@ -76,11 +82,10 @@ class IncidenciaController extends Controller
                     'descripcion'   => $row[14] ?? null,
                 ]);
             } else {
-                $incidencia = Incidencia::where('valordigerido', $valordigerido)->first();
                 if ($incidencia['revisado'] != 1) {
                     $incidencia->update([
-                        'coderror'      => $row[9]  ?? null,
-                        'descripcion'   => $row[14] ?? null,
+                        'coderror'      => $coderror,
+                        'descripcion'   => $descripcion,
                     ]);
                 }
             }

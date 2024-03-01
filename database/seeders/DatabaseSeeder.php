@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Perfil;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,5 +20,21 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        $arrayNewPerfiles = [
+            [
+                'perfil' => 'Administrador'
+            ],
+            [
+                'perfil' => 'Soporte'
+            ],
+            [
+                'perfil' => 'Partner'
+            ],
+        ];
+
+        foreach ($arrayNewPerfiles as $perfilData) {
+            Perfil::create($perfilData);
+        }
     }
 }
