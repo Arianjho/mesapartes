@@ -6,6 +6,7 @@ use App\Models\Perfil;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class UsuarioController extends Controller
 {
@@ -63,5 +64,27 @@ class UsuarioController extends Controller
         $usuario = Usuario::where('id', $request->id)->delete();
 
         return Response()->json($usuario);
+    }
+
+    public function login(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+
+        $usuario = Usuario::where('correo', $email)->first();
+        if ($usuario) {
+            if (Hash::check($password, $usuario->password)) {
+                Session::put('usuario', $usuario->toArray());
+
+                return Response()->json('success');
+            }
+        }
+        return Response()->json('error');
+    }
+
+    public function logout()
+    {
+        Session::forget('usuario');
+        return redirect('/iniciar-sesion');
     }
 }

@@ -54,7 +54,6 @@
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
     <script>
         var formUsuario = $('#form-usuarios');
 
@@ -68,6 +67,9 @@
             $('#table-usuarios').DataTable({
                 processing: true,
                 serverSide: true,
+                language: {
+                    url: "{{ asset('language/datatables/es.json') }}",
+                },
                 ajax: "{{ url('usuarios') }}",
                 columns: [{
                         data: 'dni',
@@ -190,5 +192,4 @@
             }
         }
     </script>
-    <script src="{{ asset('js/usuarios.js') }}"></script>
 @endsection

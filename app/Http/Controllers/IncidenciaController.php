@@ -14,33 +14,48 @@ class IncidenciaController extends Controller
 
     public function index()
     {
-        $incidencias = Incidencia::all();
-        return view('incidencias', compact('incidencias'));
+        $query = Incidencia::query();
+
+        if (request()->ajax()) {
+            return datatables()->eloquent($query->orderByRaw("FIELD(revisado, 0, 2, 1)"))
+                ->addColumn('option', function ($incidencia) {
+                    return view('incidencias.option', compact('incidencia'));
+                })
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+
+        return view('incidencias.index');
     }
 
-    public function show($id)
+    public function show(Request $request)
     {
-        $incidencia = Incidencia::find($id);
-        return json_encode($incidencia);
+        $where = array('id' => $request->id);
+        $incidencia  = Incidencia::where($where)->first();
+
+        return Response()->json($incidencia);
     }
 
-    public function revisar($id)
+    public function revisar(Request $request)
     {
-        $incidencia = Incidencia::find($id);
+        $where = array('id' => $request->id);
+        $incidencia  = Incidencia::where($where)->first();
         $incidencia['revisado'] = 1;
         $incidencia['fecharevisado'] = Carbon::now();
-        if ($incidencia->save()) {
-            return 1;
-        }
+        $incidencia->save();
+
+        return Response()->json($incidencia);
     }
 
-    public function pendiente($id)
+    public function pendiente(Request $request)
     {
-        $incidencia = Incidencia::find($id);
+        $where = array('id' => $request->id);
+        $incidencia  = Incidencia::where($where)->first();
         $incidencia['revisado'] = 2;
-        if ($incidencia->save()) {
-            return 1;
-        }
+        $incidencia->save();
+
+        return Response()->json($incidencia);
     }
 
     public function importar(Request $request)
@@ -69,7 +84,7 @@ class IncidenciaController extends Controller
 
             if (!$incidencia) {
                 Incidencia::create([
-                    'revisado'      => strlen($row[0]) > 0 ? 1 : 0,
+                    'revisado'      => 0,
                     'ruc'           => $row[1]  ?? null,
                     'fecha'         => $fecha ? Carbon::parse($fecha)->subDay() : null,
                     'razonsocial'   => $row[3]  ?? null,

@@ -37,22 +37,14 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <x-modal>
-        <x-slot:id>
-            logoutModal
-        </x-slot:id>
-        <x-slot:title>
-            Ready to Leave?
-        </x-slot:title>
-        <x-slot:footer>
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
-        </x-slot:footer>
-
-        Select "Logout" below if you are ready to end your current session.
-    </x-modal>
-
     @yield('js')
+    <script>
+        function logout() {
+            if (confirm("¿Seguro que desea cerrar la sesión?") == true) {
+                window.location = "{{ route('seguridad.logout') }}";
+            }
+        }
+    </script>
 </body>
 
 </html>

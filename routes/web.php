@@ -5,6 +5,7 @@ use App\Http\Controllers\IncidenciaOSIController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Middleware\Cors;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,19 +22,31 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('incidencias', [IncidenciaController::class, 'index'])->name('incidencias');
-Route::get('incidencias/show/{id}', [IncidenciaController::class, 'show']);
-Route::post('incidencias/revisar/{id}', [IncidenciaController::class, 'revisar']);
-Route::post('incidencias/editar/{id}', [IncidenciaController::class, 'pendiente']);
-Route::post('incidencias/importar', [IncidenciaController::class, 'importar'])->name('importar');
+Route::get('iniciar-sesion', function () {
+    if (Session::has('usuario')) {
+        return redirect('/incidencias');
+    }
+    return view('seguridad.login');
+});
 
-Route::get('incidenciasosi', [IncidenciaOSIController::class, 'index'])->name('incidenciasosi');
-Route::get('incidenciasosi/show/{id}', [IncidenciaOSIController::class, 'show']);
-Route::post('incidenciasosi/revisar/{id}', [IncidenciaOSIController::class, 'revisar'])->middleware('cors');
-Route::post('incidenciasosi/editar/{id}', [IncidenciaOSIController::class, 'pendiente']);
-Route::post('incidenciasosi/importar', [IncidenciaOSIController::class, 'importar'])->name('importarosi');
+Route::post('seguridad/login', [UsuarioController::class, 'login'])->name('seguridad.login');
+Route::get('seguridad/logout', [UsuarioController::class, 'logout'])->name('seguridad.logout');
 
-Route::get('usuarios', [UsuarioController::class, 'index'])->name('usuarios');
-Route::post('usuarios/create', [UsuarioController::class, 'store'])->name('usuarios.store');
-Route::post('usuarios/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
-Route::post('usuarios/delete', [UsuarioController::class, 'destroy'])->name('usuarios.delete');
+Route::prefix('')->middleware(['hasUserSession'])->group(function () {
+    Route::get('incidencias', [IncidenciaController::class, 'index'])->name('incidencias.list');
+    Route::post('incidencias/show', [IncidenciaController::class, 'show'])->name('incidencias.show');
+    Route::post('incidencias/review', [IncidenciaController::class, 'revisar'])->name('incidencias.review');
+    Route::post('incidencias/edit', [IncidenciaController::class, 'pendiente'])->name('incidencias.edit');
+    Route::post('incidencias/import', [IncidenciaController::class, 'importar'])->name('incidencias.import');
+
+    Route::get('incidenciasose', [IncidenciaOSIController::class, 'index'])->name('incidenciasose.list');
+    Route::post('incidenciasose/show', [IncidenciaOSIController::class, 'show'])->name('incidenciasose.show');
+    Route::post('incidenciasose/review', [IncidenciaOSIController::class, 'revisar'])->name('incidenciasose.review');
+    Route::post('incidenciasose/edit', [IncidenciaOSIController::class, 'pendiente'])->name('incidenciasose.edit');
+    Route::post('incidenciasose/import', [IncidenciaOSIController::class, 'importar'])->name('incidenciasose.import');
+
+    Route::get('usuarios', [UsuarioController::class, 'index'])->name('usuarios');
+    Route::post('usuarios/create', [UsuarioController::class, 'store'])->name('usuarios.store');
+    Route::post('usuarios/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+    Route::post('usuarios/delete', [UsuarioController::class, 'destroy'])->name('usuarios.delete');
+});

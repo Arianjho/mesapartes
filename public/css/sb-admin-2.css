@@ -10289,10 +10289,7 @@ a:focus {
   .topbar .dropdown {
     position: relative;
   }
-  .topbar .dropdown .dropdown-menu {
-    width: auto;
-    right: 0;
-  }
+
   .topbar .dropdown-list {
     width: 20rem !important;
   }
@@ -10867,7 +10864,7 @@ a:focus {
 }
 
 .bg-login-image {
-  background: url("https://source.unsplash.com/K4mSJ7kc0As/600x800");
+  background: url("https://elperuano.pe/fotografia/thumbnail/2021/04/21/000114681M.jpg");
   background-position: center;
   background-size: cover;
 }
