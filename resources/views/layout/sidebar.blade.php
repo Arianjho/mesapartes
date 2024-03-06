@@ -27,6 +27,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item {{ Request::is('incidencias') ? 'active' : ''}}" href="{{ route('incidencias.list')}}">Incidencias</a>
                 <a class="collapse-item {{ Request::is('incidenciasose') ? 'active' : ''}}" href="{{ route('incidenciasose.list')}}">Incidencias OSE</a>
+                <a class="collapse-item {{ Request::is('api') ? 'active' : ''}}" href="{{ route('api')}}">Consulta API</a>
             </div>
         </div>
     </li>

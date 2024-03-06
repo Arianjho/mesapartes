@@ -43,6 +43,7 @@ class IncidenciaController extends Controller
         $incidencia  = Incidencia::where($where)->first();
         $incidencia['revisado'] = 1;
         $incidencia['fecharevisado'] = Carbon::now();
+        $incidencia['detalle'] = $request->detalle;
         $incidencia->save();
 
         return Response()->json($incidencia);
@@ -63,22 +64,23 @@ class IncidenciaController extends Controller
         $archivo = $request->archivo;
         $rutaArchivo = $archivo->move(public_path('uploads'), $archivo->getClientOriginalName());
 
-        $fechaBaseExcel = mktime(0, 0, 0, 1, 1, 1900);
+        //$fechaBaseExcel = mktime(0, 0, 0, 1, 1, 1900);
 
         $datosArchivo = Excel::toArray(new IncidenciaImport, $rutaArchivo);
         array_shift($datosArchivo[0]);
 
+        //echo json_encode($datosArchivo);die;
+
         foreach ($datosArchivo[0] as $row) {
             if (isset($row[2])) {
-                $fechaSerialExcel = intval($row[2]);
-                $fecha = date('Y-m-d', ($fechaBaseExcel + ($fechaSerialExcel - 1) * 86400));
+                $fecha = Carbon::createFromFormat('Y-m-d H:i:s', $row[2])->toDateString();
             } else {
                 $fecha = null;
             }
 
             $valordigerido = $row[8];
-            $coderror = $row[9] ?? null;
-            $descripcion = $row[14] ?? null;
+            $coderror = $row[9] ?? "NULL";
+            $descripcion = $row[14] ?? "NULL";
 
             $incidencia  = Incidencia::where('valordigerido', $valordigerido)->first();
 
@@ -86,15 +88,15 @@ class IncidenciaController extends Controller
                 Incidencia::create([
                     'revisado'      => 0,
                     'ruc'           => $row[1]  ?? null,
-                    'fecha'         => $fecha ? Carbon::parse($fecha)->subDay() : null,
+                    'fecha'         => $fecha,
                     'razonsocial'   => $row[3]  ?? null,
                     'documento'     => $row[4]  ?? null,
                     'tipodocumento' => $row[5]  ?? null,
-                    'serie'         => $row[6]  ?? null,
-                    'correlativo'   => $row[7]  ?? null,
+                    'serie'         => $row[6]  ?? "NULL",
+                    'correlativo'   => $row[7]  ?? "NULL",
                     'valordigerido' => $row[8]  ?? null,
-                    'coderror'      => $row[9]  ?? null,
-                    'descripcion'   => $row[14] ?? null,
+                    'coderror'      => $row[9]  ?? "NULL",
+                    'descripcion'   => $row[14] ?? "NULL",
                 ]);
             } else {
                 if ($incidencia['revisado'] != 1) {

@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Session;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/incidencias');
 });
 
 Route::get('iniciar-sesion', function () {
@@ -49,4 +49,8 @@ Route::prefix('')->middleware(['hasUserSession'])->group(function () {
     Route::post('usuarios/create', [UsuarioController::class, 'store'])->name('usuarios.store');
     Route::post('usuarios/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
     Route::post('usuarios/delete', [UsuarioController::class, 'destroy'])->name('usuarios.delete');
+
+    Route::get('/api', function () {
+        return view('api');
+    })->name('api');
 });
