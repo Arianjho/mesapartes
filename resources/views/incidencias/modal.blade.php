@@ -51,8 +51,12 @@
                             <input class="form-control" name="coderror" type="text" value="" disabled>
                         </div>
                         <div class="form-group col-md-12">
-                            <label for="">Descripcion</label>
+                            <label for="">Descripcion Error</label>
                             <textarea class="form-control" name="descripcion" rows="5" disabled></textarea>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="">Descripcion Solución</label>
+                            <textarea class="form-control" name="detalle" rows="2" disabled></textarea>
                         </div>
                     </div>
                 </div>

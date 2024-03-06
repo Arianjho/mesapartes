@@ -237,6 +237,7 @@
                     formIncidencia.find('input[name="correlativo"]').val(incidencia.correlativo);
                     formIncidencia.find('input[name="coderror"]').val(incidencia.coderror);
                     formIncidencia.find('textarea[name="descripcion"]').val(incidencia.descripcion);
+                    formIncidencia.find('textarea[name="detalle"]').val(incidencia.detalle);
                 },
                 error: function(error) {
                     console.log(error);
@@ -265,7 +266,7 @@
         }
 
         function review(id) {
-            let detalle = prompt("Ingrese el detalle de la revisión", "");
+            let detalle = prompt("Ingrese el detalle de la revisión", "Documento emitido");
             if (detalle != null) {
                 $.ajax({
                     type: 'POST',
