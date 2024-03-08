@@ -28,6 +28,7 @@
                 <a class="collapse-item {{ Request::is('incidencias') ? 'active' : ''}}" href="{{ route('incidencias.list')}}">Incidencias</a>
                 <a class="collapse-item {{ Request::is('incidenciasose') ? 'active' : ''}}" href="{{ route('incidenciasose.list')}}">Incidencias OSE</a>
                 <a class="collapse-item {{ Request::is('api') ? 'active' : ''}}" href="{{ route('api')}}">Consulta API</a>
+                <a class="collapse-item {{ Request::is('tickets') ? 'active' : ''}}" href="{{ route('tickets')}}">Tickets</a>
             </div>
         </div>
     </li>
@@ -43,6 +44,7 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item {{ Request::is('usuarios') ? 'active' : ''}}" href="{{ route('usuarios')}}">Usuarios</a>
+                <a class="collapse-item {{ Request::is('clientes') ? 'active' : ''}}" href="{{ route('clientes.list')}}">Clientes</a>
             </div>
         </div>
     </li>

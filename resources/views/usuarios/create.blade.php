@@ -17,7 +17,14 @@
                         </div>
                         <div id="password" class="form-group col-md-6">
                             <label for="">Contraseña (*)</label>
-                            <input class="form-control" name="password" type="password" value="">
+                            <div class="input-group">
+                                <input class="form-control" name="password" type="password" value="">
+                                <div class="input-group-append">
+                                    <button id="btn-password" onClick="verPassword()" class="btn btn-outline-secondary" type="button">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="">Nombres (*)</label>
@@ -47,9 +54,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="cerrar" type="button" class="btn btn-secondary"
-                        data-dismiss="modal">Cerrar</button>
-                        <button id="btn-create" type="submit" class="btn btn-success">Guardar</button>
+                    <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button id="btn-create" type="submit" class="btn btn-success">Guardar</button>
                 </div>
             </form>
         </div>

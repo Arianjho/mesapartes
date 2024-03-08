@@ -9,6 +9,7 @@
                 USUARIOS
             </h6>
             <a href="javascript:void(0)" onClick="add()" class="btn btn-sm btn-success">
+                Agregar
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-person-plus-fill" viewBox="0 0 16 16">
                     <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
@@ -20,7 +21,7 @@
         @include('usuarios.create')
         <div class="card-body">
             <div class="table-responsive">
-                <table id="table-usuarios" style="width: 100%" class="display table table-bordered table-hover">
+                <table id="table-usuarios" style="width: 100%" class="display table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
                             <th style="width: 15%">DNI</th>
@@ -142,7 +143,7 @@
 
         function editFunc(id) {
             $('#btn-create').prop('disabled', true);
-
+        
             $.ajax({
                 type: "POST",
                 url: "{{ route('usuarios.edit') }}",
@@ -189,6 +190,17 @@
                         oTable.fnDraw(false);
                     }
                 });
+            }
+        }
+
+        function verPassword() {
+            var tipo = $("#password input")[0];
+            if (tipo.type == "password") {
+                tipo.type = "text";
+                $("#btn-password").html('<i class="fa fa-eye-slash" aria-hidden="true"></i>');
+            } else {
+                tipo.type = "password";
+                $("#btn-password").html('<i class="fa fa-eye" aria-hidden="true"></i>');
             }
         }
     </script>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\IncidenciaOSIController;
 use App\Http\Controllers\UsuarioController;
@@ -50,7 +51,13 @@ Route::prefix('')->middleware(['hasUserSession'])->group(function () {
     Route::post('usuarios/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
     Route::post('usuarios/delete', [UsuarioController::class, 'destroy'])->name('usuarios.delete');
 
+    Route::get('clientes', [ClienteController::class, 'index'])->name('clientes.list');
+    Route::post('clientes/import', [ClienteController::class, 'importar'])->name('clientes.import');
+
     Route::get('/api', function () {
         return view('api');
     })->name('api');
+    Route::get('/tickets', function () {
+        return view('tickets.index');
+    })->name('tickets');
 });
