@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Cliente;
+use App\Models\Incidencia;
+use App\Models\IncidenciaOSI;
 use App\Models\Perfil;
 use Illuminate\Database\Seeder;
 
@@ -14,14 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        $arrayNewPerfiles = [
+        /*$arrayNewPerfiles = [
             [
                 'perfil' => 'Administrador'
             ],
@@ -35,6 +31,16 @@ class DatabaseSeeder extends Seeder
 
         foreach ($arrayNewPerfiles as $perfilData) {
             Perfil::create($perfilData);
+        }*/
+
+        $incidencias = IncidenciaOSI::all();
+
+        foreach ($incidencias as $incidencia) {
+            $cliente = Cliente::where('ruc', $incidencia->ruc)->first();
+            if ($cliente) {
+                $incidencia->partner = $cliente->partner;
+                $incidencia->save();
+            }
         }
     }
 }

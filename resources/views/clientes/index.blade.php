@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('titulo', 'Incidencias')
+@section('titulo', 'Clientes')
 
 @section('template')
     <div class="card shadow mb-4">

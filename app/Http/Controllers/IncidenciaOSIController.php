@@ -41,6 +41,7 @@ class IncidenciaOSIController extends Controller
         $incidencia  = IncidenciaOSI::where($where)->first();
         $incidencia['revisado'] = 1;
         $incidencia['fecharevisado'] = Carbon::now();
+        $incidencia['detalle'] = $request->detalle;
         $incidencia->save();
 
         return Response()->json($incidencia);
