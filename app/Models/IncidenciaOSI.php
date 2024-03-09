@@ -20,6 +20,8 @@ class IncidenciaOSI extends Model
         'correlativo',
         'valordigerido',
         'coderror',
-        'descripcion'
+        'descripcion',
+        'detalle',
+        'partner'
     ];
 }

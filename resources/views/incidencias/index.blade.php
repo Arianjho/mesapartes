@@ -48,7 +48,8 @@
                             <th style="width: 10%">Fecha Rev.</th>
                             <th style="width: 10%">RUC</th>
                             <th style="width: 10%">Fecha</th>
-                            <th style="width: 40%">Razón Social</th>
+                            <th style="width: 32%">Razón Social</th>
+                            <th style="width: 8%">Partner</th>
                             <th style="width: 10%">Documento</th>
                             <th style="width: 5%">Error</th>
                             <th style="width: 10%">Ope.</th>
@@ -60,7 +61,8 @@
                             <th style="width: 10%">Fecha Rev.</th>
                             <th style="width: 10%">RUC</th>
                             <th style="width: 10%">Fecha</th>
-                            <th style="width: 40%">Razón Social</th>
+                            <th style="width: 32%">Razón Social</th>
+                            <th style="width: 8%">Partner</th>
                             <th style="width: 12%">Documento</th>
                             <th style="width: 5%">Cod. Error</th>
                             <th style="width: 10%">Ope.</th>
@@ -160,6 +162,10 @@
                         name: 'razonsocial'
                     },
                     {
+                        data: 'partner',
+                        name: 'partner'
+                    },
+                    {
                         data: 'documento',
                         name: 'documento'
                     },
@@ -199,7 +205,7 @@
 
                             // Verificar si la columna es 'revisado', 'fecharevisado' o 'Ope.'
                             if (column.index() !== 0 && column.index() !== 1 && column
-                                .index() !== 7) {
+                                .index() !== 8) {
                                 let input = $('<input>').css('width', '100%').attr(
                                     'placeholder', title).addClass('form-control');
                                 footer.empty().append(input);

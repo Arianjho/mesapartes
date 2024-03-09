@@ -9,6 +9,7 @@ class Incidencia extends Model
 {
     use HasFactory;
 
+    protected $table = 'incidencias';
     protected $fillable = [
         'ruc',
         'fecha',
@@ -19,6 +20,9 @@ class Incidencia extends Model
         'correlativo',
         'valordigerido',
         'coderror',
-        'descripcion'
+        'descripcion',
+        'fecharevisado',
+        'detalle',
+        'partner'
     ];
 }
