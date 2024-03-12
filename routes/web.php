@@ -26,6 +26,10 @@ Route::get('/', function () {
 Route::get('iniciar-sesion', function () {
     if (Session::has('usuario')) {
         return redirect('/incidencias');
+    } else {
+        if (request()->ajax()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
     }
     return view('seguridad.login');
 });
@@ -52,6 +56,8 @@ Route::prefix('')->middleware(['hasUserSession'])->group(function () {
     Route::post('usuarios/delete', [UsuarioController::class, 'destroy'])->name('usuarios.delete');
 
     Route::get('clientes', [ClienteController::class, 'index'])->name('clientes.list');
+    Route::post('clientes/change', [ClienteController::class, 'cambiar'])->name('clientes.change');
+    Route::post('clientes/review', [ClienteController::class, 'revisar'])->name('clientes.review');
     Route::post('clientes/import', [ClienteController::class, 'importar'])->name('clientes.import');
 
     Route::get('/api', function () {

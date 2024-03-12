@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Imports\ClienteImport;
 use App\Models\Cliente;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ClienteController extends Controller
@@ -17,6 +19,9 @@ class ClienteController extends Controller
         $query = Cliente::query();
 
         if (request()->ajax()) {
+            if (!Session::has('usuario')) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
             return datatables()->eloquent($query)
                 ->addColumn('option', function ($cliente) {
                     return view('clientes.option', compact('cliente'));
@@ -27,6 +32,26 @@ class ClienteController extends Controller
         }
 
         return view('clientes.index');
+    }
+
+    public function cambiar(Request $request)
+    {
+        $where = array('id' => $request->id);
+        $cliente  = Cliente::where($where)->first();
+        $cliente['modlocal'] = "Si";
+        $cliente->save();
+
+        return Response()->json($cliente);
+    }
+
+    public function revisar(Request $request)
+    {
+        $where = array('id' => $request->id);
+        $cliente  = Cliente::where($where)->first();
+        $cliente['ultmodificacion'] = Carbon::now();
+        $cliente->save();
+
+        return Response()->json($cliente);
     }
 
     public function importar(Request $request)

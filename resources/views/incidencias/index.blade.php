@@ -124,7 +124,15 @@
                 language: {
                     url: "{{ asset('language/datatables/es.json') }}",
                 },
-                ajax: "{{ route('incidencias.list') }}",
+                ajax: {
+                    url: "{{ route('incidencias.list') }}",
+                    error: function(xhr, textStatus, errorThrown) {
+                        console.log(xhr.responseText);
+                        if (xhr.status == 401) {
+                            window.location.href = "{{ url('/iniciar-sesion') }}";
+                        }
+                    }
+                },
                 columns: [{
                         data: 'revisado',
                         name: 'Revisado',
