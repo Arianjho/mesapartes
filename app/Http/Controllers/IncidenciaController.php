@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Imports\IncidenciaImport;
-use App\Models\Cliente;
+use App\Models\Empresa;
 use App\Models\Incidencia;
-use App\Models\Usuario;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -90,9 +89,9 @@ class IncidenciaController extends Controller
             $incidencia  = Incidencia::where('valordigerido', $valordigerido)->first();
 
             if (!$incidencia) {
-                $cliente = Cliente::where('ruc', $row[1])->first();
-                if ($cliente->partner) {
-                    $partner = $cliente->partner;
+                $empresa = Empresa::where('ruc', $row[1])->first();
+                if ($empresa) {
+                    $partner = $empresa->partner;
                 } else {
                     $partner = null;
                 }
@@ -109,7 +108,7 @@ class IncidenciaController extends Controller
                     'valordigerido' => $row[8]  ?? null,
                     'coderror'      => $row[9]  ?? "NULL",
                     'descripcion'   => $row[14] ?? "NULL",
-                    'partner'       => $partner,
+                    'partner'       => $partner ?? null,
                 ]);
             } else {
                 if ($incidencia['revisado'] != 1) {

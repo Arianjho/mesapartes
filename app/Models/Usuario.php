@@ -25,4 +25,9 @@ class Usuario extends Model
     {
         return $this->belongsTo(Perfil::class);
     }
+
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class);
+    }
 }

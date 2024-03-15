@@ -307,5 +307,9 @@
             var oTable = $('#table-incidencias').dataTable();
             oTable.fnDraw(false);
         }
+
+        $("#form-import").submit(function (e) { 
+            $("#cargar").html("Cargando...").prop('disabled', true);
+        });
     </script>
 @endsection

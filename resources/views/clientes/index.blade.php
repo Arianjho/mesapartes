@@ -34,24 +34,24 @@
                     <thead>
                         <tr>
                             <th style="width: 10%">RUC</th>
-                            <th style="width: 40%">Razón Social</th>
+                            <th style="width: 37%">Razón Social</th>
                             <th style="width: 6%">Partner</th>
                             <th style="width: 10%">Estado</th>
                             <th style="width: 10%">Modalidad</th>
                             <th style="width: 9%">Mod. Local</th>
-                            <th style="width: 10%">Ult. Mod.</th>
+                            <th style="width: 13%">Ult. Mod.</th>
                             <th style="width: 5%">Ope.</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th style="width: 10%">RUC</th>
-                            <th style="width: 40%">Razón Social</th>
+                            <th style="width: 37%">Razón Social</th>
                             <th style="width: 6%">Partner</th>
                             <th style="width: 10%">Estado</th>
                             <th style="width: 10%">Modalidad</th>
                             <th style="width: 9%">Mod. Local</th>
-                            <th style="width: 10%">Ult. Mod.</th>
+                            <th style="width: 13%">Ult. Mod.</th>
                             <th style="width: 5%">Ope.</th>
                         </tr>
                     </tfoot>

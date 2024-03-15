@@ -2,10 +2,10 @@
 
 namespace App\Imports;
 
-use App\Models\Cliente;
+use App\Models\Empresa;
 use Maatwebsite\Excel\Concerns\ToModel;
 
-class ClienteImport implements ToModel
+class EmpresaImport implements ToModel
 {
     /**
     * @param array $row
@@ -14,7 +14,7 @@ class ClienteImport implements ToModel
     */
     public function model(array $row)
     {
-        return new Cliente([
+        return new Empresa([
             'ruc'           => $row[0] ?? null,
             'razonsocial'   => $row[1] ?? null,
             'partner'         => $row[2] ?? null,
