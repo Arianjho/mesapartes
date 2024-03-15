@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Imports\IncidenciaOSIImport;
+use App\Models\Cliente;
 use App\Models\IncidenciaOSI;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class IncidenciaOSIController extends Controller
@@ -15,6 +17,9 @@ class IncidenciaOSIController extends Controller
         $query = IncidenciaOSI::query();
 
         if (request()->ajax()) {
+            if (!Session::has('usuario')) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
             return datatables()->eloquent($query->orderByRaw("FIELD(revisado, 0, 2, 1)"))
                 ->addColumn('option', function ($incidencia) {
                     return view('incidenciasose.option', compact('incidencia'));
@@ -88,6 +93,13 @@ class IncidenciaOSIController extends Controller
                 $incidencia = IncidenciaOSI::where('valordigerido', $valordigerido)->first();
 
                 if (!$incidencia) {
+                    $cliente = Cliente::where('ruc', $row[1])->first();
+                    if ($cliente->partner) {
+                        $partner = $cliente->partner;
+                    } else {
+                        $partner = null;
+                    }
+
                     IncidenciaOSI::create([
                         'revisado'      => 0,
                         'ruc'           => $row[1]  ?? null,
@@ -100,6 +112,7 @@ class IncidenciaOSIController extends Controller
                         'valordigerido' => $row[8]  ?? null,
                         'coderror'      => $row[9]  ?? "NULL",
                         'descripcion'   => $row[14] ?? "NULL",
+                        'partner'       => $partner,
                     ]);
                 } else {
                     if ($incidencia['revisado'] != 1) {

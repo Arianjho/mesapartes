@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Imports\IncidenciaImport;
+use App\Models\Empresa;
 use App\Models\Incidencia;
-use App\Models\Usuario;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class IncidenciaController extends Controller
@@ -17,6 +18,9 @@ class IncidenciaController extends Controller
         $query = Incidencia::query();
 
         if (request()->ajax()) {
+            if (!Session::has('usuario')) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
             return datatables()->eloquent($query->orderByRaw("FIELD(revisado, 0, 2, 1)"))
                 ->addColumn('option', function ($incidencia) {
                     return view('incidencias.option', compact('incidencia'));
@@ -85,6 +89,13 @@ class IncidenciaController extends Controller
             $incidencia  = Incidencia::where('valordigerido', $valordigerido)->first();
 
             if (!$incidencia) {
+                $empresa = Empresa::where('ruc', $row[1])->first();
+                if ($empresa) {
+                    $partner = $empresa->partner;
+                } else {
+                    $partner = null;
+                }
+
                 Incidencia::create([
                     'revisado'      => 0,
                     'ruc'           => $row[1]  ?? null,
@@ -97,6 +108,7 @@ class IncidenciaController extends Controller
                     'valordigerido' => $row[8]  ?? null,
                     'coderror'      => $row[9]  ?? "NULL",
                     'descripcion'   => $row[14] ?? "NULL",
+                    'partner'       => $partner ?? null,
                 ]);
             } else {
                 if ($incidencia['revisado'] != 1) {

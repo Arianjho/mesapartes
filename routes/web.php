@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\IncidenciaOSIController;
 use App\Http\Controllers\UsuarioController;
-use App\Http\Middleware\Cors;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -26,6 +25,10 @@ Route::get('/', function () {
 Route::get('iniciar-sesion', function () {
     if (Session::has('usuario')) {
         return redirect('/incidencias');
+    } else {
+        if (request()->ajax()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
     }
     return view('seguridad.login');
 });
@@ -51,11 +54,13 @@ Route::prefix('')->middleware(['hasUserSession'])->group(function () {
     Route::post('usuarios/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
     Route::post('usuarios/delete', [UsuarioController::class, 'destroy'])->name('usuarios.delete');
 
-    Route::get('clientes', [ClienteController::class, 'index'])->name('clientes.list');
-    Route::post('clientes/import', [ClienteController::class, 'importar'])->name('clientes.import');
+    Route::get('clientes', [EmpresaController::class, 'index'])->name('clientes.list');
+    Route::post('clientes/change', [EmpresaController::class, 'cambiar'])->name('clientes.change');
+    Route::post('clientes/review', [EmpresaController::class, 'revisar'])->name('clientes.review');
+    Route::post('clientes/import', [EmpresaController::class, 'importar'])->name('clientes.import');
 
     Route::get('/api', function () {
-        return view('api');
+        return view('api/index');
     })->name('api');
     Route::get('/tickets', function () {
         return view('tickets.index');

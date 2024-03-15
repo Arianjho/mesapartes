@@ -33,12 +33,26 @@ class DatabaseSeeder extends Seeder
             Perfil::create($perfilData);
         }*/
 
-        $incidencias = IncidenciaOSI::all();
+        /*$incidencias = Incidencia::all();
 
         foreach ($incidencias as $incidencia) {
             $cliente = Cliente::where('ruc', $incidencia->ruc)->first();
             if ($cliente) {
-                $incidencia->partner = $cliente->partner;
+                if (!$incidencia->partner) {
+                    $incidencia->partner = $cliente->partner;
+                    $incidencia->save();
+                }
+            }
+        }*/
+
+        $incidenciasOSI = IncidenciaOSI::all();
+        $incidencias = Incidencia::all();
+        foreach ($incidencias as $incidencia) {
+            $incidenciaOSI = $incidenciasOSI->where('valordigerido', $incidencia->valordigerido)->first();
+            if ($incidenciaOSI) {
+                $incidencia->revisado = $incidenciaOSI->revisado;
+                $incidencia->detalle = $incidenciaOSI->detalle;
+                $incidencia->fecharevisado = $incidenciaOSI->fecharevisado;
                 $incidencia->save();
             }
         }

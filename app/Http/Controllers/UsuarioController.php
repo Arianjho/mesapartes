@@ -13,7 +13,10 @@ class UsuarioController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return datatables()->of(Usuario::all())
+            if (!Session::has('usuario')) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+            return datatables()->of(Usuario::with('perfil','partner')->get())
                 ->addColumn('option', function ($usuario) {
                     return view('usuarios.option', compact('usuario'));
                 })

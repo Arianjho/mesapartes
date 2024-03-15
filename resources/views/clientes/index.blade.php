@@ -33,22 +33,26 @@
                 <table id="table-clientes" style="width: 100%" class="display table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
-                            <th style="width: 20%">RUC</th>
-                            <th style="width: 40%">Razón Social</th>
-                            <th style="width: 10%">Partner</th>
+                            <th style="width: 10%">RUC</th>
+                            <th style="width: 37%">Razón Social</th>
+                            <th style="width: 6%">Partner</th>
                             <th style="width: 10%">Estado</th>
                             <th style="width: 10%">Modalidad</th>
-                            <th style="width: 10%">Ope.</th>
+                            <th style="width: 9%">Mod. Local</th>
+                            <th style="width: 13%">Ult. Mod.</th>
+                            <th style="width: 5%">Ope.</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th style="width: 20%">RUC</th>
-                            <th style="width: 40%">Razón Social</th>
-                            <th style="width: 10%">Partner</th>
+                            <th style="width: 10%">RUC</th>
+                            <th style="width: 37%">Razón Social</th>
+                            <th style="width: 6%">Partner</th>
                             <th style="width: 10%">Estado</th>
                             <th style="width: 10%">Modalidad</th>
-                            <th style="width: 10%">Ope.</th>
+                            <th style="width: 9%">Mod. Local</th>
+                            <th style="width: 13%">Ult. Mod.</th>
+                            <th style="width: 5%">Ope.</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -106,7 +110,14 @@
                 language: {
                     url: "{{ asset('language/datatables/es.json') }}",
                 },
-                ajax: "{{ route('clientes.list') }}",
+                ajax: {
+                    url: "{{ route('clientes.list') }}",
+                    error: function(xhr, textStatus, errorThrown) {
+                        if (xhr.status == 401) {
+                            window.location.href = "{{ url('/iniciar-sesion') }}";
+                        }
+                    }
+                },
                 columns: [{
                         data: 'ruc',
                         name: 'ruc'
@@ -128,6 +139,14 @@
                         name: 'modalidad'
                     },
                     {
+                        data: 'modlocal',
+                        name: 'modlocal'
+                    },
+                    {
+                        data: 'ultmodificacion',
+                        name: 'ultmodificacion'
+                    },
+                    {
                         data: 'option',
                         name: 'Ope.',
                         searchable: false,
@@ -144,7 +163,7 @@
                         if (footer !== null) {
                             let title = footer.text();
 
-                            if (column.index() !== 5) {
+                            if (column.index() !== 7 && column.index() !== 6) {
                                 let input = $('<input>').css('width', '100%').attr(
                                     'placeholder', title).addClass('form-control');
                                 footer.empty().append(input);
@@ -164,6 +183,46 @@
         function actualizar() {
             var oTable = $('#table-clientes').dataTable();
             oTable.fnDraw(false);
+        }
+
+        function cambiar(id, razonsocial) {
+            if (confirm(`¿${razonsocial} tendrá que modificarse el local?`) == true) {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('clientes.change') }}",
+                    data: {
+                        id: id
+                    },
+                    cache: false,
+                    success: (incidencia) => {
+                        var oTable = $('#table-clientes').dataTable();
+                        oTable.fnDraw(false);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+
+        function revisar(id, razonsocial) {
+            if (confirm(`¿Ya fue modificado el local de ${razonsocial}?`) == true) {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('clientes.review') }}",
+                    data: {
+                        id: id
+                    },
+                    cache: false,
+                    success: (incidencia) => {
+                        var oTable = $('#table-clientes').dataTable();
+                        oTable.fnDraw(false);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         }
     </script>
 @endsection

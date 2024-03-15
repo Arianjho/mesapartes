@@ -21,7 +21,8 @@
         @include('usuarios.create')
         <div class="card-body">
             <div class="table-responsive">
-                <table id="table-usuarios" style="width: 100%" class="display table table-bordered table-hover table-striped">
+                <table id="table-usuarios" style="width: 100%"
+                    class="display table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
                             <th style="width: 15%">DNI</th>
@@ -71,7 +72,14 @@
                 language: {
                     url: "{{ asset('language/datatables/es.json') }}",
                 },
-                ajax: "{{ url('usuarios') }}",
+                ajax: {
+                    url: "{{ route('usuarios') }}",
+                    error: function(xhr, textStatus, errorThrown) {
+                        if (xhr.status == 401) {
+                            window.location.href = "{{ url('/iniciar-sesion') }}";
+                        }
+                    }
+                },
                 columns: [{
                         data: 'dni',
                         name: 'DNI'
@@ -143,7 +151,7 @@
 
         function editFunc(id) {
             $('#btn-create').prop('disabled', true);
-        
+
             $.ajax({
                 type: "POST",
                 url: "{{ route('usuarios.edit') }}",
