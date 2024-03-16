@@ -18,6 +18,14 @@
                             d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
                     </svg>
                 </button>
+                <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#filtros">
+                    Filtros
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-funnel" viewBox="0 0 16 16">
+                        <path
+                            d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
+                    </svg>
+                </button>
                 <a href="https://colab.research.google.com/drive/1GqXy24GKAMl0k1X_DFI7VNCn0AwXOqJB?usp=sharing"
                     target="_blank" type="button" class="btn btn-sm btn-info">
                     CSV to Excel
@@ -126,6 +134,16 @@
                 },
                 ajax: {
                     url: "{{ route('incidencias.list') }}",
+                    type: 'POST',
+                    data: function(d) {
+                        d.errores = $('input[name="errores[]"]:checked').map(function() {
+                            return this.value;
+                        }).get();
+
+                        d.estados = $('input[name="estados[]"]:checked').map(function() {
+                            return this.value;
+                        }).get();
+                    },
                     error: function(xhr, textStatus, errorThrown) {
                         console.log(xhr.responseText);
                         if (xhr.status == 401) {
@@ -188,7 +206,7 @@
                         orderable: false
                     },
                 ],
-                createdRow: function(row, data, dataIndex) {
+                rowCallback: function(row, data, dataIndex) {
                     if (data.revisado == 1) {
                         $(row).css('background-color', '#d4edda');
                     } else if (data.revisado == 0) {
@@ -211,7 +229,6 @@
                         if (footer !== null) {
                             let title = footer.text();
 
-                            // Verificar si la columna es 'revisado', 'fecharevisado' o 'Ope.'
                             if (column.index() !== 0 && column.index() !== 1 && column
                                 .index() !== 8) {
                                 let input = $('<input>').css('width', '100%').attr(
@@ -269,8 +286,8 @@
                     },
                     cache: false,
                     success: (incidencia) => {
-                        var oTable = $('#table-incidencias').dataTable();
-                        oTable.fnDraw(false);
+                        var table = $('#table-incidencias').DataTable();
+                        table.draw();
                     },
                     error: function(error) {
                         console.log(error);
@@ -291,8 +308,8 @@
                     },
                     cache: false,
                     success: (incidencia) => {
-                        var oTable = $('#table-incidencias').dataTable();
-                        oTable.fnDraw(false);
+                        var table = $('#table-incidencias').DataTable();
+                        table.draw();
                     },
                     error: function(error) {
                         console.log(error);
@@ -304,8 +321,28 @@
         }
 
         function actualizar() {
-            var oTable = $('#table-incidencias').dataTable();
-            oTable.fnDraw(false);
+            var table = $('#table-incidencias').DataTable();
+            table.order([]).draw();
         }
+
+        $("#form-import").submit(function(e) {
+            $("#cargar").html("Cargando...").prop('disabled', true);
+        });
+
+        let formFiltros = $('#formFiltros');
+        formFiltros.find('input[name="limpiarErrores"]').on('change', function() {
+            if ($(this).is(':checked')) {
+                formFiltros.find('input[name="errores[]"]').prop('checked', true);
+            } else {
+                formFiltros.find('input[name="errores[]"]').prop('checked', false);
+            }
+        });
+
+        $("#formFiltros").submit(function(e) {
+            e.preventDefault();
+            var table = $('#table-incidencias').DataTable();
+            table.draw();
+            $("#filtros").modal('hide');
+        });
     </script>
 @endsection

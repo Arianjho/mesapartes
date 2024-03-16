@@ -1,12 +1,12 @@
 @extends('layout.app')
 
-@section('titulo', 'Clientes')
+@section('titulo', 'Empresas')
 
 @section('template')
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">
-                CLIENTES
+                EMPRESAS
             </h6>
             <div>
                 <button type="button" class="btn btn-sm btn-secondary" onClick="actualizar()">
@@ -18,6 +18,14 @@
                             d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
                     </svg>
                 </button>
+                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#agregar">
+                    Agregar
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-plus-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                    </svg>
+                </button>
                 <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#importar">
                     Importar
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -27,31 +35,33 @@
                     </svg>
                 </button>
             </div>
+            @include('clientes.modal')
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table id="table-clientes" style="width: 100%" class="display table table-bordered table-hover table-striped">
+                <table id="table-clientes" style="width: 100%"
+                    class="display table table-bordered table-hover table-striped">
                     <thead>
                         <tr>
                             <th style="width: 10%">RUC</th>
-                            <th style="width: 40%">Razón Social</th>
+                            <th style="width: 37%">Razón Social</th>
                             <th style="width: 6%">Partner</th>
                             <th style="width: 10%">Estado</th>
                             <th style="width: 10%">Modalidad</th>
                             <th style="width: 9%">Mod. Local</th>
-                            <th style="width: 10%">Ult. Mod.</th>
+                            <th style="width: 13%">Ult. Mod.</th>
                             <th style="width: 5%">Ope.</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th style="width: 10%">RUC</th>
-                            <th style="width: 40%">Razón Social</th>
+                            <th style="width: 37%">Razón Social</th>
                             <th style="width: 6%">Partner</th>
                             <th style="width: 10%">Estado</th>
                             <th style="width: 10%">Modalidad</th>
                             <th style="width: 9%">Mod. Local</th>
-                            <th style="width: 10%">Ult. Mod.</th>
+                            <th style="width: 13%">Ult. Mod.</th>
                             <th style="width: 5%">Ope.</th>
                         </tr>
                     </tfoot>
@@ -224,5 +234,33 @@
                 });
             }
         }
+
+        let formAgregar = $('#formAgregar');
+        formAgregar.on('submit', function(e) {
+            e.preventDefault();
+
+            let ruc = formAgregar.find('input[name="ruc"]').val();
+            let razonsocial = formAgregar.find('input[name="razonsocial"]').val();
+            let partner = formAgregar.find('select[name="partner"]').val();
+            let estado = formAgregar.find('input[name="estado"]').val();
+            let modalidad = formAgregar.find('select[name="modalidad"]').val();
+            let modlocal = formAgregar.find('select[name="modlocal"]').val();
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('empresas.create') }}",
+                data: formAgregar.serialize(),
+                cache: false,
+                success: (empresa) => {
+                    var oTable = $('#table-clientes').dataTable();
+                    oTable.fnDraw(false);
+                    $('#agregar').modal('hide');
+                    formAgregar.trigger('reset');
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
     </script>
 @endsection

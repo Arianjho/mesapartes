@@ -61,8 +61,84 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button id="cerrar" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .checkbox-container {
+        column-count: 12;
+        column-gap: 20px;
+    }
+</style>
+
+<div class="modal fade" id="filtros" tabindex="-1" aria-labelledby="importarDoc" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importarDoc">Aplicar Filtros</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="formFiltros" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="">Errores:</label>
+                            <div class="checkbox-container">
+                                <div class="form-check">
+                                    <input class="form-check-input" name="limpiarErrores" type="checkbox"
+                                        id="limpiarError" checked>
+                                    <label for="limpiarError" class="form-check-label">
+                                        Todos
+                                    </label>
+                                </div>
+                                @foreach ($errores as $error)
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="errores[]" type="checkbox"
+                                            value="{{ $error->coderror }}" id="codError{{ $error->coderror }}"
+                                            checked>
+                                        <label class="form-check-label" for="codError{{ $error->coderror }}">
+                                            {{ $error->coderror }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="">Estado:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" name="estados[]" type="checkbox" value="0"
+                                    id="estadoRevisar" checked>
+                                <label class="form-check-label" for="estadoRevisar">
+                                    Por revisar
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" name="estados[]" type="checkbox" value="2"
+                                    id="estadoPendiente" checked>
+                                <label class="form-check-label" for="estadoPendiente">
+                                    Pendiente
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" name="estados[]" type="checkbox" value="1"
+                                    id="estadoSolucionado">
+                                <label class="form-check-label" for="estadoSolucionado">
+                                    Solucionados
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
                     <button id="cerrar" type="button" class="btn btn-secondary"
                         data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-secondary">Filtrar</button>
                 </div>
             </form>
         </div>

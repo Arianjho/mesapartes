@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\ClienteImport;
-use App\Models\Cliente;
+use App\Imports\EmpresaImport;
+use App\Models\Empresa;
+use App\Models\Partner;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
-class ClienteController extends Controller
+class EmpresaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $query = Cliente::query();
+        $query = Empresa::query();
 
         if (request()->ajax()) {
             if (!Session::has('usuario')) {
@@ -31,13 +32,14 @@ class ClienteController extends Controller
                 ->make(true);
         }
 
-        return view('clientes.index');
+        $partners = Partner::all();
+        return view('clientes.index', compact('partners'));
     }
 
     public function cambiar(Request $request)
     {
         $where = array('id' => $request->id);
-        $cliente  = Cliente::where($where)->first();
+        $cliente  = Empresa::where($where)->first();
         $cliente['modlocal'] = "Si";
         $cliente->save();
 
@@ -47,8 +49,22 @@ class ClienteController extends Controller
     public function revisar(Request $request)
     {
         $where = array('id' => $request->id);
-        $cliente  = Cliente::where($where)->first();
+        $cliente  = Empresa::where($where)->first();
         $cliente['ultmodificacion'] = Carbon::now();
+        $cliente->save();
+
+        return Response()->json($cliente);
+    }
+
+    public function create(Request $request)
+    {
+        $cliente = new Empresa();
+        $cliente->ruc = $request->ruc;
+        $cliente->razonsocial = $request->razonsocial;
+        $cliente->partner = $request->partner;
+        $cliente->estado = $request->estado;
+        $cliente->modalidad = $request->modalidad;
+        $cliente->modlocal = $request->modlocal;
         $cliente->save();
 
         return Response()->json($cliente);
@@ -59,14 +75,14 @@ class ClienteController extends Controller
         $archivo = $request->archivo;
         $rutaArchivo = $archivo->move(public_path('uploads'), $archivo->getClientOriginalName());
 
-        $datosArchivo = Excel::toArray(new ClienteImport, $rutaArchivo);
+        $datosArchivo = Excel::toArray(new EmpresaImport, $rutaArchivo);
         array_shift($datosArchivo[0]);
 
         //echo json_encode($datosArchivo);
         //die;
 
         foreach ($datosArchivo[0] as $row) {
-            Cliente::create([
+            Empresa::create([
                 'ruc'           => $row[0]  ?? null,
                 'razonsocial'   => $row[1]  ?? null,
                 'partner'       => $row[2]  ?? null,

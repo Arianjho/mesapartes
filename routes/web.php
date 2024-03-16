@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\IncidenciaOSIController;
 use App\Http\Controllers\UsuarioController;
-use App\Http\Middleware\Cors;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -39,6 +38,7 @@ Route::get('seguridad/logout', [UsuarioController::class, 'logout'])->name('segu
 
 Route::prefix('')->middleware(['hasUserSession'])->group(function () {
     Route::get('incidencias', [IncidenciaController::class, 'index'])->name('incidencias.list');
+    Route::post('incidencias', [IncidenciaController::class, 'index'])->name('incidencias.list');
     Route::post('incidencias/show', [IncidenciaController::class, 'show'])->name('incidencias.show');
     Route::post('incidencias/review', [IncidenciaController::class, 'revisar'])->name('incidencias.review');
     Route::post('incidencias/edit', [IncidenciaController::class, 'pendiente'])->name('incidencias.edit');
@@ -55,13 +55,14 @@ Route::prefix('')->middleware(['hasUserSession'])->group(function () {
     Route::post('usuarios/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
     Route::post('usuarios/delete', [UsuarioController::class, 'destroy'])->name('usuarios.delete');
 
-    Route::get('clientes', [ClienteController::class, 'index'])->name('clientes.list');
-    Route::post('clientes/change', [ClienteController::class, 'cambiar'])->name('clientes.change');
-    Route::post('clientes/review', [ClienteController::class, 'revisar'])->name('clientes.review');
-    Route::post('clientes/import', [ClienteController::class, 'importar'])->name('clientes.import');
+    Route::get('clientes', [EmpresaController::class, 'index'])->name('clientes.list');
+    Route::post('empresas/create', [EmpresaController::class, 'create'])->name('empresas.create');
+    Route::post('clientes/change', [EmpresaController::class, 'cambiar'])->name('clientes.change');
+    Route::post('clientes/review', [EmpresaController::class, 'revisar'])->name('clientes.review');
+    Route::post('clientes/import', [EmpresaController::class, 'importar'])->name('clientes.import');
 
     Route::get('/api', function () {
-        return view('api');
+        return view('api/index');
     })->name('api');
     Route::get('/tickets', function () {
         return view('tickets.index');

@@ -3,25 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Imports\IncidenciaImport;
-use App\Models\Cliente;
+use App\Models\Empresa;
 use App\Models\Incidencia;
-use App\Models\Usuario;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class IncidenciaController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $query = Incidencia::query();
+        if ($request->ajax()) {
+            $query = Incidencia::query();
 
-        if (request()->ajax()) {
-            if (!Session::has('usuario')) {
-                return response()->json(['message' => 'Unauthorized'], 401);
+            if ($request->filled('errores')) {
+                $erroresSeleccionados = $request->input('errores');
+                $query->whereIn('coderror', $erroresSeleccionados);
             }
+
+            if ($request->filled('estados')) {
+                $estadosSeleccionados = $request->input('estados');
+                $query->whereIn('revisado', $estadosSeleccionados);
+            }
+
             return datatables()->eloquent($query->orderByRaw("FIELD(revisado, 0, 2, 1)"))
                 ->addColumn('option', function ($incidencia) {
                     return view('incidencias.option', compact('incidencia'));
@@ -31,8 +36,10 @@ class IncidenciaController extends Controller
                 ->make(true);
         }
 
-        return view('incidencias.index');
+        $errores = Incidencia::select('coderror')->groupBy('coderror')->get();
+        return view('incidencias.index', compact('errores'));
     }
+
 
     public function show(Request $request)
     {
@@ -90,9 +97,9 @@ class IncidenciaController extends Controller
             $incidencia  = Incidencia::where('valordigerido', $valordigerido)->first();
 
             if (!$incidencia) {
-                $cliente = Cliente::where('ruc', $row[1])->first();
-                if ($cliente->partner) {
-                    $partner = $cliente->partner;
+                $empresa = Empresa::where('ruc', $row[1])->first();
+                if ($empresa) {
+                    $partner = $empresa->partner;
                 } else {
                     $partner = null;
                 }
@@ -109,7 +116,7 @@ class IncidenciaController extends Controller
                     'valordigerido' => $row[8]  ?? null,
                     'coderror'      => $row[9]  ?? "NULL",
                     'descripcion'   => $row[14] ?? "NULL",
-                    'partner'       => $partner,
+                    'partner'       => $partner ?? null,
                 ]);
             } else {
                 if ($incidencia['revisado'] != 1) {
