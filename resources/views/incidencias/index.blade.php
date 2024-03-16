@@ -287,7 +287,9 @@
                     cache: false,
                     success: (incidencia) => {
                         var table = $('#table-incidencias').DataTable();
+                        var currentPage = table.page();
                         table.draw();
+                        table.page(currentPage).draw('page');
                     },
                     error: function(error) {
                         console.log(error);
@@ -309,7 +311,9 @@
                     cache: false,
                     success: (incidencia) => {
                         var table = $('#table-incidencias').DataTable();
+                        var currentPage = table.page();
                         table.draw();
+                        table.page(currentPage).draw('page');
                     },
                     error: function(error) {
                         console.log(error);
@@ -322,7 +326,9 @@
 
         function actualizar() {
             var table = $('#table-incidencias').DataTable();
+            var currentPage = table.page();
             table.order([]).draw();
+            table.page(currentPage).draw('page');
         }
 
         $("#form-import").submit(function(e) {
@@ -341,7 +347,16 @@
         $("#formFiltros").submit(function(e) {
             e.preventDefault();
             var table = $('#table-incidencias').DataTable();
+
+            var currentPage = table.page();
             table.draw();
+
+            var newTotalPages = table.page.info().pages;
+            if (currentPage >= newTotalPages) {
+                currentPage = newTotalPages > 0 ? newTotalPages - 1 : 0;
+                table.page(currentPage).draw('page');
+            }
+
             $("#filtros").modal('hide');
         });
     </script>
