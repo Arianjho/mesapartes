@@ -7,20 +7,26 @@ use App\Models\Empresa;
 use App\Models\Incidencia;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class IncidenciaController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $query = Incidencia::query();
+        if ($request->ajax()) {
+            $query = Incidencia::query();
 
-        if (request()->ajax()) {
-            if (!Session::has('usuario')) {
-                return response()->json(['message' => 'Unauthorized'], 401);
+            if ($request->filled('errores')) {
+                $erroresSeleccionados = $request->input('errores');
+                $query->whereIn('coderror', $erroresSeleccionados);
             }
+
+            if ($request->filled('estados')) {
+                $estadosSeleccionados = $request->input('estados');
+                $query->whereIn('revisado', $estadosSeleccionados);
+            }
+
             return datatables()->eloquent($query->orderByRaw("FIELD(revisado, 0, 2, 1)"))
                 ->addColumn('option', function ($incidencia) {
                     return view('incidencias.option', compact('incidencia'));
@@ -30,8 +36,10 @@ class IncidenciaController extends Controller
                 ->make(true);
         }
 
-        return view('incidencias.index');
+        $errores = Incidencia::select('coderror')->groupBy('coderror')->get();
+        return view('incidencias.index', compact('errores'));
     }
+
 
     public function show(Request $request)
     {

@@ -14,6 +14,8 @@ class Empresa extends Model
         'razonsocial',
         'partner',
         'estado',
-        'modalidad'
+        'modalidad',
+        'modlocal',
+        'ultmodificacion'
     ];
 }

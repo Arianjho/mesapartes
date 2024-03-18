@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\EmpresaImport;
 use App\Models\Empresa;
+use App\Models\Partner;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -31,7 +32,8 @@ class EmpresaController extends Controller
                 ->make(true);
         }
 
-        return view('clientes.index');
+        $partners = Partner::all();
+        return view('clientes.index', compact('partners'));
     }
 
     public function cambiar(Request $request)
@@ -49,6 +51,20 @@ class EmpresaController extends Controller
         $where = array('id' => $request->id);
         $cliente  = Empresa::where($where)->first();
         $cliente['ultmodificacion'] = Carbon::now();
+        $cliente->save();
+
+        return Response()->json($cliente);
+    }
+
+    public function create(Request $request)
+    {
+        $cliente = new Empresa();
+        $cliente->ruc = $request->ruc;
+        $cliente->razonsocial = $request->razonsocial;
+        $cliente->partner = $request->partner;
+        $cliente->estado = $request->estado;
+        $cliente->modalidad = $request->modalidad;
+        $cliente->modlocal = $request->modlocal;
         $cliente->save();
 
         return Response()->json($cliente);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DiccionarioController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\IncidenciaOSIController;
@@ -38,6 +39,7 @@ Route::get('seguridad/logout', [UsuarioController::class, 'logout'])->name('segu
 
 Route::prefix('')->middleware(['hasUserSession'])->group(function () {
     Route::get('incidencias', [IncidenciaController::class, 'index'])->name('incidencias.list');
+    Route::post('incidencias', [IncidenciaController::class, 'index'])->name('incidencias.list');
     Route::post('incidencias/show', [IncidenciaController::class, 'show'])->name('incidencias.show');
     Route::post('incidencias/review', [IncidenciaController::class, 'revisar'])->name('incidencias.review');
     Route::post('incidencias/edit', [IncidenciaController::class, 'pendiente'])->name('incidencias.edit');
@@ -55,9 +57,15 @@ Route::prefix('')->middleware(['hasUserSession'])->group(function () {
     Route::post('usuarios/delete', [UsuarioController::class, 'destroy'])->name('usuarios.delete');
 
     Route::get('clientes', [EmpresaController::class, 'index'])->name('clientes.list');
+    Route::post('empresas/create', [EmpresaController::class, 'create'])->name('empresas.create');
     Route::post('clientes/change', [EmpresaController::class, 'cambiar'])->name('clientes.change');
     Route::post('clientes/review', [EmpresaController::class, 'revisar'])->name('clientes.review');
     Route::post('clientes/import', [EmpresaController::class, 'importar'])->name('clientes.import');
+
+    Route::get('diccionario', [DiccionarioController::class, 'index'])->name('diccionario');
+    Route::post('diccionario/create', [DiccionarioController::class, 'store'])->name('diccionario.store');
+    Route::post('diccionario/edit', [DiccionarioController::class, 'edit'])->name('diccionario.edit');
+    Route::post('diccionario/delete', [DiccionarioController::class, 'destroy'])->name('diccionario.delete');
 
     Route::get('/api', function () {
         return view('api/index');

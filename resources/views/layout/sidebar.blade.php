@@ -17,7 +17,7 @@
 
     <hr class="sidebar-divider">
 
-    <li class="nav-item {{ Request::is('incidencias') || Request::is('incidenciasose') ? 'active' : ''}} ">
+    <li class="nav-item {{ Request::is('incidencias') || Request::is('incidenciasose') || Request::is('api') || Request::is('diccionario') || Request::is('tickets') ? 'active' : ''}} ">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-file-excel"></i>
@@ -28,6 +28,7 @@
                 <a class="collapse-item {{ Request::is('incidencias') ? 'active' : ''}}" href="{{ route('incidencias.list')}}">Incidencias</a>
                 <a class="collapse-item {{ Request::is('incidenciasose') ? 'active' : ''}}" href="{{ route('incidenciasose.list')}}">Incidencias OSE</a>
                 <a class="collapse-item {{ Request::is('api') ? 'active' : ''}}" href="{{ route('api')}}">Consulta API</a>
+                <a class="collapse-item {{ Request::is('diccionario') ? 'active' : ''}}" href="{{ route('diccionario')}}">Diccionario</a>
                 <a class="collapse-item {{ Request::is('tickets') ? 'active' : ''}}" href="{{ route('tickets')}}">Tickets</a>
             </div>
         </div>
