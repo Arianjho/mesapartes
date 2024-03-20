@@ -36,7 +36,7 @@ class IncidenciaController extends Controller
                 ->make(true);
         }
 
-        $errores = Incidencia::select('coderror')->groupBy('coderror')->get();
+        $errores = Incidencia::select('coderror')->groupBy('coderror')->orderByRaw('CAST(coderror AS UNSIGNED) ASC')->get();
         return view('incidencias.index', compact('errores'));
     }
 

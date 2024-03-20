@@ -48,8 +48,9 @@
                             <th style="width: 6%">Partner</th>
                             <th style="width: 10%">Estado</th>
                             <th style="width: 10%">Modalidad</th>
-                            <th style="width: 9%">Mod. Local</th>
+                            <th style="width: 4%">Mod.</th>
                             <th style="width: 13%">Ult. Mod.</th>
+                            <th style="width: 4%">Envio</th>
                             <th style="width: 5%">Ope.</th>
                         </tr>
                     </thead>
@@ -60,8 +61,9 @@
                             <th style="width: 6%">Partner</th>
                             <th style="width: 10%">Estado</th>
                             <th style="width: 10%">Modalidad</th>
-                            <th style="width: 9%">Mod. Local</th>
+                            <th style="width: 4%">Mod.</th>
                             <th style="width: 13%">Ult. Mod.</th>
+                            <th style="width: 4%">Envio</th>
                             <th style="width: 5%">Ope.</th>
                         </tr>
                     </tfoot>
@@ -157,6 +159,10 @@
                         name: 'ultmodificacion'
                     },
                     {
+                        data: 'formaenvio',
+                        name: 'formaenvio'
+                    },
+                    {
                         data: 'option',
                         name: 'Ope.',
                         searchable: false,
@@ -173,7 +179,7 @@
                         if (footer !== null) {
                             let title = footer.text();
 
-                            if (column.index() !== 7 && column.index() !== 6) {
+                            if (column.index() !== 8 && column.index() !== 6) {
                                 let input = $('<input>').css('width', '100%').attr(
                                     'placeholder', title).addClass('form-control');
                                 footer.empty().append(input);
