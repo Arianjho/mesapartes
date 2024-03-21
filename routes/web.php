@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DiccionarioController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\FaltanteController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\IncidenciaOSIController;
 use App\Http\Controllers\UsuarioController;
